@@ -1,9 +1,61 @@
 [build-system]
-# AVOID CHANGING REQUIRES: IT WILL BE UPDATED BY PYSCAFFOLD!
-requires = ["setuptools>=46.1.0", "setuptools_scm[toml]>=5"]
+requires = ["setuptools>=68", "setuptools_scm>=8", "wheel"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools_scm]
-# For smarter version schemes and other configuration options,
-# check out https://github.com/pypa/setuptools_scm
-version_scheme = "no-guess-dev"
+[project]
+name = "emotion-engine"
+version = "0.1.0"
+description = "Multimodal emotion recognition engine (audio + text + fusion)"
+readme = "README.rst"
+requires-python = ">=3.9"
+license = { file = "LICENSE.txt" }
+authors = [
+  { name = "Satyam Sinha", email = "satyamsinha9404@gmail.com" }
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12"
+]
+
+dependencies = [
+  "numpy",
+  "torch",
+  "sounddevice",
+  "librosa",
+  "transformers",
+  "pydantic",
+  "rich",
+  "typer"
+]
+
+
+[project.scripts]
+emotion-engine = "emotion_engine.cli:app"
+
+[project.optional-dependencies]
+asr = ["faster-whisper", "ctranslate2"]
+nlp = ["transformers", "torch"]
+full = [
+  "torch",
+  "faster-whisper",
+  "ctranslate2",
+  "transformers",
+]
+
+audio = [
+  "torch",
+  "sounddevice",
+  "librosa"
+]
+
+dev = [
+  "pytest",
+  "pytest-cov",
+  "black",
+  "ruff",
+  "mypy"
+]

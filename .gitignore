@@ -46,9 +46,11 @@ docs/api/*
 docs/_rst/*
 docs/_build/*
 cover/*
+typings/*
 MANIFEST
 
 # Per-project virtualenvs
 .venv*/
+scaffold-env/
 .conda*/
 .python-version
