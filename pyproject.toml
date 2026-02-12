@@ -1,14 +1,15 @@
 [build-system]
-requires = ["setuptools>=68", "setuptools_scm>=8", "wheel"]
+requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "emotion-engine"
+name = "multimodal-emotion-engine"
 version = "0.1.0"
 description = "Multimodal emotion recognition engine (audio + text + fusion)"
 readme = "README.rst"
 requires-python = ">=3.9"
-license = { file = "LICENSE.txt" }
+license = "MIT"
+license-files = ["LICENSE.txt"]
 authors = [
   { name = "Satyam Sinha", email = "satyamsinha9404@gmail.com" }
 ]

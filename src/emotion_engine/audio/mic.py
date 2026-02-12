@@ -1,13 +1,13 @@
 import sounddevice as sd
 import numpy as np
-from emotion_engine.config import SAMPLE_RATE, AUDIO_DURATION
+from emotion_engine.config import SAMPLE_RATE
 
-def record_audio() -> np.ndarray:
+def record_audio(duration: float) -> np.ndarray:
     audio = sd.rec(
-        int(SAMPLE_RATE * AUDIO_DURATION),
+        int(SAMPLE_RATE * duration),
         samplerate=SAMPLE_RATE,
         channels=1,
-        dtype="float32"
+        dtype="float32",
     )
     sd.wait()
     return audio.flatten()

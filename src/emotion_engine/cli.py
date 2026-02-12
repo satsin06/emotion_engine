@@ -8,18 +8,31 @@ app = typer.Typer()
 def listen():
     """Listen continuously from microphone"""
     engine = EmotionEngine()
-    for result in engine.analyze_microphone_stream():
-        typer.echo(result)
+
+    for r in engine.analyze_microphone_stream():
+        if r.get("silence"):
+            continue  # keep listening silently
+
+        typer.echo(f"\n📝 Text : {r['text']}")
+        typer.echo(f"🎧 Audio Emotion : {r['audio']}")
+        typer.echo(f"🧠 Text Emotion  : {r['text_emotion']}")
+        typer.echo(f"🔀 Fused Emotion : {r['fused']}")
 
 @app.command()
 def file(path: str):
     """Analyze audio file"""
     engine = EmotionEngine()
-    result = engine.analyze_audio_file(path)
-    typer.echo(result)
+    r = engine.analyze_audio_file(path)
+
+    typer.echo(f"\n📝 Text : {r['text']}")
+    typer.echo(f"🎧 Audio Emotion : {r['audio_emotion']}")
+    typer.echo(f"🧠 Text Emotion  : {r['text_emotion']}")
+    typer.echo(f"🔀 Fused Emotion : {r['fused_emotion']}")
+
 
 def main():
     app()
+
 
 if __name__ == "__main__":
     main()

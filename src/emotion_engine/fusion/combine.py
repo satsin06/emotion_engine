@@ -1,16 +1,40 @@
-def fuse(audio_probs: dict, text_probs: dict, pitch: float) -> dict:
-    fused = {}
+from typing import Dict
 
-    for emotion in audio_probs:
-        fused[emotion] = (
-            0.6 * audio_probs.get(emotion, 0)
-            + 0.4 * text_probs.get(emotion, 0)
-        )
+TEXT_TO_AUDIO = {
+    "joy": "happy",
+    "sadness": "sad",
+    "anger": "angry",
+    "neutral": "neutral",
+    "fear": "neutral",
+    "surprise": "neutral",
+    "disgust": "angry",
+}
 
-    # pitch heuristic
-    if pitch > 180:
-        fused["angry"] += 0.05
-    elif pitch < 120:
-        fused["sad"] += 0.05
+AUDIO_EMOTIONS = ["happy", "sad", "angry", "neutral"]
+
+
+def fuse(
+    audio_probs: Dict[str, float],
+    text_probs: Dict[str, float],
+    *,
+    text_weight: float = 0.7,
+    audio_weight: float = 0.3,
+) -> Dict[str, float]:
+    fused = {e: 0.0 for e in AUDIO_EMOTIONS}
+
+    # 1️⃣ Map text emotions → audio space
+    for text_emotion, score in text_probs.items():
+        mapped = TEXT_TO_AUDIO.get(text_emotion)
+        if mapped:
+            fused[mapped] += text_weight * score
+
+    # 2️⃣ Add audio emotion directly
+    for emotion in AUDIO_EMOTIONS:
+        fused[emotion] += audio_weight * audio_probs.get(emotion, 0.0)
+
+    # 3️⃣ Normalize (soft)
+    total = sum(fused.values())
+    if total > 0:
+        fused = {k: v / total for k, v in fused.items()}
 
     return fused
